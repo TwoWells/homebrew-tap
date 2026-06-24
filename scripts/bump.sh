@@ -10,7 +10,7 @@ set -euo pipefail
 REPO="TwoWells/Themis"
 FORMULA="Formula/themis.rb"
 
-out() { echo "${1}" >> "${GITHUB_OUTPUT:-/dev/null}"; }
+out() { echo "${1}" >>"${GITHUB_OUTPUT:-/dev/null}"; }
 
 fetch_sha() {
   gh release download "${latest_tag}" --repo "${REPO}" --pattern "${1}.sha256" --output - | awk '{print $1}'
@@ -21,7 +21,8 @@ latest_ver="${latest_tag#v}"
 current_ver="$(sed -n 's#.*releases/download/v\([^/]*\)/.*#\1#p' "${FORMULA}" | head -n1)"
 
 echo "current: ${current_ver}  latest: ${latest_ver}"
-if [[ "${current_ver}" == "${latest_ver}" ]]; then
+if [[ "${current_ver}" == "${latest_ver}" ]]
+then
   echo "Formula is up to date."
   out "BUMPED=false"
   exit 0
