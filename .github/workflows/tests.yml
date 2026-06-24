@@ -1,0 +1,42 @@
+name: brew test-bot
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  test-bot:
+    strategy:
+      fail-fast: false
+      matrix:
+        # Linux x86_64 + Apple Silicon macOS — the two prebuilt targets. Both
+        # are free, standard GitHub-hosted runners for this public repo.
+        os: [ubuntu-latest, macos-14]
+    runs-on: ${{ matrix.os }}
+    steps:
+      - name: Set up Homebrew
+        id: set-up-homebrew
+        uses: Homebrew/actions/setup-homebrew@master
+
+      - name: Cache Homebrew Bundler RubyGems
+        uses: actions/cache@v4
+        with:
+          path: ${{ steps.set-up-homebrew.outputs.gems-path }}
+          key: ${{ matrix.os }}-rubygems-${{ steps.set-up-homebrew.outputs.gems-hash }}
+          restore-keys: ${{ matrix.os }}-rubygems-
+
+      - run: brew test-bot --only-cleanup-before
+
+      - run: brew test-bot --only-setup
+
+      # Style + audit the formula on every push and PR.
+      - run: brew test-bot --only-tap-syntax
+
+      # Full install + `test do` run — only on PRs (where the gate matters).
+      - run: brew test-bot --only-formulae
+        if: github.event_name == 'pull_request'

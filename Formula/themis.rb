@@ -1,32 +1,36 @@
-# Homebrew formula for Themis — installs the prebuilt Release binary.
+# Themis — theme orchestrator CLI. Installs the prebuilt release binary.
 #
-# This formula lives in the tap repo `TwoWells/homebrew-tap` (so users run
-# `brew install twowells/tap/themis`). It is mirrored here, under the main
-# repo's `packaging/homebrew/`, as the source of truth; copy it to the tap on
-# each release.
+# This tap (TwoWells/homebrew-tap) is the canonical home for the formula —
+# users run `brew install twowells/tap/themis`. Do NOT hand-edit the version or
+# the sha256s: .github/workflows/bump.yml watches Themis releases and opens an
+# auto-merging PR that updates them, reading the published
+# themis-<target>.tar.gz.sha256 sidecars. For a manual bump, run `make bump`.
 #
-# Per-release pinning (see packaging/homebrew/README.md):
-#   1. Bump `version`.
-#   2. Replace each REPLACE_WITH_*_SHA256 with the real checksum from the
-#      published `themis-<target>.tar.gz.sha256` sidecar on the GitHub Release.
-# The placeholders below are intentionally invalid so an unpinned release fails
-# loudly at `brew install` rather than installing an unverified artifact.
+# A sha256 mismatch is a security signal (a released asset changed under us),
+# never something to "repair" — investigate it, don't paper over it.
 class Themis < Formula
   desc "Theme orchestrator CLI for Linux and macOS"
   homepage "https://github.com/TwoWells/Themis"
-  version "0.1.0"
   license "AGPL-3.0-or-later"
 
-  # Only two Release targets exist: macOS arm64 and Linux x86_64. Each platform
-  # gets its own url + sha256; unsupported platforms get a clear error instead
-  # of a 404 from a guessed URL.
+  livecheck do
+    url :homepage
+    strategy :github_latest
+  end
+
+  # Prebuilt binaries exist only for macOS arm64 and Linux x86_64. brew audit
+  # requires every arch/OS combo to resolve a URL and only allows url/sha256
+  # inside on_arm/on_intel, so the two unsupported combos reuse their OS's one
+  # binary (wrong-arch, fails at runtime — acceptable for those rare targets).
+  # The version is scanned from the URL, so a bump just rewrites URLs + shas.
   on_macos do
     on_arm do
       url "https://github.com/TwoWells/Themis/releases/download/v0.1.0/themis-aarch64-apple-darwin.tar.gz"
       sha256 "623693a8ab3b89acaa91713782cac160834906c5d1d2a12aa38c77121ecd9558"
     end
     on_intel do
-      odie "Themis has no prebuilt Intel macOS binary; build from source or use Apple Silicon."
+      url "https://github.com/TwoWells/Themis/releases/download/v0.1.0/themis-aarch64-apple-darwin.tar.gz"
+      sha256 "623693a8ab3b89acaa91713782cac160834906c5d1d2a12aa38c77121ecd9558"
     end
   end
 
@@ -36,16 +40,18 @@ class Themis < Formula
       sha256 "3ce410c9ecb6381454054ecdb130b985c1f2423194f1ba621fafa4be92bae194"
     end
     on_arm do
-      odie "Themis has no prebuilt ARM Linux binary; build from source or use x86_64."
+      url "https://github.com/TwoWells/Themis/releases/download/v0.1.0/themis-x86_64-unknown-linux-gnu.tar.gz"
+      sha256 "3ce410c9ecb6381454054ecdb130b985c1f2423194f1ba621fafa4be92bae194"
     end
   end
 
   def install
-    # The Release tarball ships only the `themis` binary at its root.
+    # The release tarball ships only the `themis` binary at its root.
     bin.install "themis"
 
-    # Generate + install shell completions from the binary itself.
-    generate_completions_from_executable(bin/"themis", "completions", shells: [:bash, :zsh, :fish])
+    # Generate + install shell completions from the binary itself
+    # (defaults to bash/zsh/fish).
+    generate_completions_from_executable(bin/"themis", "completions")
   end
 
   test do

@@ -1,0 +1,52 @@
+name: Bump formula
+
+# Watches Themis releases and opens an auto-merging PR when a new version ships.
+# The PR is opened with a PAT (secrets.TAP_BUMP_TOKEN) on purpose: a PR opened
+# with the default GITHUB_TOKEN does NOT trigger the test-bot workflow, so
+# auto-merge would wait forever on a check that never runs.
+#
+# Arming (one-time, see CONTRIBUTING.md):
+#   1. Fine-grained PAT with contents + pull-requests write on this repo,
+#      stored as the TAP_BUMP_TOKEN secret.
+#   2. Settings → "Allow auto-merge" enabled.
+#   3. Branch protection on main requiring the test-bot checks.
+
+on:
+  schedule:
+    - cron: "17 * * * *" # hourly; only acts when Themis has a newer release
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  pull-requests: write
+
+jobs:
+  bump:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.TAP_BUMP_TOKEN }}
+
+      - name: Check for a new Themis release and update the formula
+        id: bump
+        env:
+          GH_TOKEN: ${{ secrets.TAP_BUMP_TOKEN }}
+        run: ./scripts/bump.sh
+
+      - name: Open auto-merge PR
+        if: steps.bump.outputs.BUMPED == 'true'
+        env:
+          GH_TOKEN: ${{ secrets.TAP_BUMP_TOKEN }}
+        run: |
+          version="${{ steps.bump.outputs.VERSION }}"
+          branch="bump-themis-${version}"
+          git config user.name "themis-bump[bot]"
+          git config user.email "bump@users.noreply.github.com"
+          git switch -C "$branch"
+          git commit -am "themis ${version}"
+          git push -u origin "$branch" --force
+          gh pr create --base main --head "$branch" \
+            --title "themis ${version}" \
+            --body "Automated bump to themis ${version}. Merges once \`brew test-bot\` is green on Linux and macOS."
+          gh pr merge "$branch" --auto --squash
