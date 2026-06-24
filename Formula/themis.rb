@@ -18,19 +18,31 @@ class Themis < Formula
     strategy :github_latest
   end
 
-  # Prebuilt binaries exist for macOS arm64 and Linux x86_64. Each OS points at
-  # its one binary so every platform brew audits resolves a URL (an unresolved
-  # URL fails `brew audit`); macOS Intel / ARM Linux land on the wrong-arch
-  # binary and fail at runtime, which is acceptable for those rare targets. The
-  # version is scanned from the URL, so a bump just rewrites the URLs + shas.
+  # Prebuilt binaries exist only for macOS arm64 and Linux x86_64. brew audit
+  # requires every arch/OS combo to resolve a URL and only allows url/sha256
+  # inside on_arm/on_intel, so the two unsupported combos reuse their OS's one
+  # binary (wrong-arch, fails at runtime — acceptable for those rare targets).
+  # The version is scanned from the URL, so a bump just rewrites URLs + shas.
   on_macos do
-    url "https://github.com/TwoWells/Themis/releases/download/v0.1.0/themis-aarch64-apple-darwin.tar.gz"
-    sha256 "623693a8ab3b89acaa91713782cac160834906c5d1d2a12aa38c77121ecd9558"
+    on_arm do
+      url "https://github.com/TwoWells/Themis/releases/download/v0.1.0/themis-aarch64-apple-darwin.tar.gz"
+      sha256 "623693a8ab3b89acaa91713782cac160834906c5d1d2a12aa38c77121ecd9558"
+    end
+    on_intel do
+      url "https://github.com/TwoWells/Themis/releases/download/v0.1.0/themis-aarch64-apple-darwin.tar.gz"
+      sha256 "623693a8ab3b89acaa91713782cac160834906c5d1d2a12aa38c77121ecd9558"
+    end
   end
 
   on_linux do
-    url "https://github.com/TwoWells/Themis/releases/download/v0.1.0/themis-x86_64-unknown-linux-gnu.tar.gz"
-    sha256 "3ce410c9ecb6381454054ecdb130b985c1f2423194f1ba621fafa4be92bae194"
+    on_intel do
+      url "https://github.com/TwoWells/Themis/releases/download/v0.1.0/themis-x86_64-unknown-linux-gnu.tar.gz"
+      sha256 "3ce410c9ecb6381454054ecdb130b985c1f2423194f1ba621fafa4be92bae194"
+    end
+    on_arm do
+      url "https://github.com/TwoWells/Themis/releases/download/v0.1.0/themis-x86_64-unknown-linux-gnu.tar.gz"
+      sha256 "3ce410c9ecb6381454054ecdb130b985c1f2423194f1ba621fafa4be92bae194"
+    end
   end
 
   def install
