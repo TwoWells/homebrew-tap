@@ -21,17 +21,44 @@ artifact changed under us — **investigate it as a security signal**; do not ju
 regenerate the hash. (This is deliberately the opposite of a source-archive
 repo, where auto-generated tarballs legitimately drift.)
 
-## Arming the automation (one-time)
+## Editing the formula
 
-The bump workflow is inert until these are set:
+`brew audit` / `brew style` (run by `tests.yml`) enforce a few non-obvious rules
+that cost a multi-PR debugging loop to learn. Before touching `Formula/themis.rb`:
 
-1. **PAT** — a fine-grained personal access token with **contents** and
-   **pull-requests** write on this repo, stored as the `TAP_BUMP_TOKEN` secret.
-   It must be a PAT, not `GITHUB_TOKEN`: a PR opened by `GITHUB_TOKEN` does not
-   trigger `tests.yml`, so auto-merge would never see a green check.
-2. **Allow auto-merge** — enable it in Settings → General.
-3. **Branch protection** on `main` requiring the `test-bot` checks, so
-   auto-merge actually waits for green instead of merging immediately.
+- **No explicit `version`** — it's scanned from the URL; declaring it trips the
+  "redundant with version scanned from URL" audit.
+- **`url`/`sha256` go inside `on_arm`/`on_intel`**, never directly in
+  `on_macos`/`on_linux` (`FormulaAudit/ComponentsOrder`).
+- **Every arch/OS combo must resolve a URL** or audit rejects the formula
+  ("requires at least a URL"). That's why all four combos are defined and the
+  two unsupported ones (Intel macOS, ARM Linux) reuse their OS's binary — the
+  duplication is deliberate, not a bug. `install` refuses those combos at
+  runtime with a clear error.
+- **No `odie`/`raise` in the formula body** — it runs at _evaluation_ time, and
+  audit evaluates every platform, so it aborts as "Invalid formula." Guard at
+  install time instead.
+- **Edit via a PR.** The ruleset blocks direct pushes to `main`; `tests.yml`
+  (test-bot on Linux + macOS) gates the merge. Locally,
+  `make style && make audit` catches most of it — on a machine with Homebrew.
+
+## Arming the automation
+
+Already configured; documented here so it can be rebuilt (e.g. when the PAT
+expires).
+
+1. **PAT** (the `TAP_BUMP_TOKEN` secret) — a fine-grained token with
+   **resource owner = the `TwoWells` org**, repository `homebrew-tap`, and
+   **Contents: Read and write** + **Pull requests: Read and write**; set via
+   `gh secret set TAP_BUMP_TOKEN`. It must be a PAT, not `GITHUB_TOKEN`: a PR
+   opened by `GITHUB_TOKEN` does not trigger `tests.yml`, so auto-merge would
+   never see a green check. (Org-owned, so it may need owner approval.)
+2. **Auto-merge** — "Allow auto-merge" and "Automatically delete head branches"
+   enabled in Settings → General.
+3. **Ruleset** on `main` (Settings → Rules) — require a PR with **0 approvals**,
+   require the **`test-bot (ubuntu-latest)`** and **`test-bot (macos-14)`**
+   checks, squash-only, block force-pushes. No bypass actors, so even
+   maintainers land changes through a green PR.
 
 ## Local development
 
