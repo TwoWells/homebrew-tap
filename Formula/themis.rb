@@ -46,6 +46,12 @@ class Themis < Formula
   end
 
   def install
+    # Every arch/OS resolves a URL above (brew requires one), so the two
+    # unsupported combos — Intel macOS, ARM Linux — would otherwise install a
+    # wrong-arch binary. Refuse them here with a clear message instead.
+    unsupported = (OS.mac? && Hardware::CPU.intel?) || (OS.linux? && Hardware::CPU.arm?)
+    odie "Themis has no prebuilt binary for this platform." if unsupported
+
     # The release tarball ships only the `themis` binary at its root.
     bin.install "themis"
 

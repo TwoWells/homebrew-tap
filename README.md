@@ -9,9 +9,10 @@ Linux and macOS.
 brew install twowells/tap/themis
 ```
 
-This installs the prebuilt `themis` binary (macOS Apple Silicon and Linux x86_64) plus bash/zsh/fish
-shell completions. Intel macOS and ARM Linux have no prebuilt binary; on those, build from source
-(`cargo install themis-cli`) or use another channel.
+This installs the prebuilt `themis` binary plus bash/zsh/fish shell completions. The only targets
+Themis ships are **macOS Apple Silicon** and **Linux x86_64**; on Intel macOS or ARM Linux
+`brew install` stops with a clear "no prebuilt binary" error — build [Themis](https://github.com/TwoWells/Themis)
+from source there instead.
 
 ## How it stays current
 
