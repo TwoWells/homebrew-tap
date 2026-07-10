@@ -40,12 +40,9 @@ class Lattice < Formula
     # "64-unknown-linux-gnu", so Linux pins the version explicitly. macOS scans
     # its aarch64 URL fine — and audit rejects a redundant global pin — so the
     # pin lives only here. bump.sh rewrites this line along with URLs + shas.
-    # The ComponentsOrder cop's allowlist predates per-OS version pins; the
-    # DSL replays version onto the Linux spec just like url/sha256 (readall,
-    # audit, and install all accept it).
-    # rubocop:disable FormulaAudit/ComponentsOrder
+    # (The ComponentsOrder cop objects to per-OS version pins; .rubocop.yml
+    # excludes this formula from it.)
     version "0.5.0"
-    # rubocop:enable FormulaAudit/ComponentsOrder
     on_intel do
       url "https://github.com/TwoWells/Lattice/releases/download/v0.5.0/lattice-x86_64-unknown-linux-gnu.tar.gz"
       sha256 "88cf24373f631db6f3e7a6e2e599efb58d05f3fc2f9c960f633893a9ce5fb664"

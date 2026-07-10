@@ -1,0 +1,15 @@
+# Tap-level style overrides for `brew style` (and so test-bot's tap-syntax).
+#
+# ComponentsOrder's allowlist forbids `version` inside on_linux blocks, but
+# themis and lattice need exactly that: brew's URL scanner misparses their
+# x86_64-unknown-linux-gnu basenames as "64-unknown-linux-gnu" on Linux while
+# scanning the aarch64 macOS URLs fine — so a global pin is rejected as
+# redundant by audit on macOS, and the pin must live in the on_linux block.
+# The DSL replays it onto the Linux spec just like url/sha256 (readall, audit,
+# and install all accept it); only this cop objects. Inline
+# rubocop:disable directives are themselves forbidden by brew style
+# (Style/DisableCopsWithinSourceCodeDirective), hence this file.
+FormulaAudit/ComponentsOrder:
+  Exclude:
+    - "Formula/themis.rb"
+    - "Formula/lattice.rb"
