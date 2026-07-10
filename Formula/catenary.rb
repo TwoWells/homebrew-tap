@@ -3,9 +3,11 @@
 #
 # This tap (TwoWells/homebrew-tap) is the canonical home for the formula —
 # users run `brew install twowells/tap/catenary` (the Claude Code plugin's
-# missing-binary hint suggests exactly that command). Version + sha256s are
-# stamped from the published release assets; do NOT push a bump before the
-# assets exist.
+# missing-binary hint suggests exactly that command). Do NOT hand-edit the
+# version, the `version` line, or the sha256s: .github/workflows/bump.yml
+# watches Catenary releases and opens an auto-merging PR that updates them
+# (passing the bare-binary asset names explicitly — see scripts/bump.sh).
+# For a manual bump, run `make bump`.
 #
 # A sha256 mismatch is a security signal (a released asset changed under us),
 # never something to "repair" — investigate it, don't paper over it.
