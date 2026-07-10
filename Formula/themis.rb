@@ -12,6 +12,11 @@ class Themis < Formula
   desc "Theme orchestrator CLI for Linux and macOS"
   homepage "https://github.com/TwoWells/Themis"
   license "AGPL-3.0-or-later"
+  # Linux installs made before the on_linux version pin below registered as
+  # version "64-unknown-linux-gnu" (brew misparsed the x86_64 basename), which
+  # compares HIGHER than any real version. The scheme bump lets 0.1.0+
+  # supersede those installs.
+  version_scheme 1
 
   livecheck do
     url :homepage
@@ -35,6 +40,14 @@ class Themis < Formula
   end
 
   on_linux do
+    # brew's URL scanner misparses the x86_64 basename as
+    # "64-unknown-linux-gnu" (caught by lattice's test-bot run; themis shares
+    # the basename shape), so Linux pins the version explicitly. macOS scans
+    # its aarch64 URL fine — and audit rejects a redundant global pin — so the
+    # pin lives only here. bump.sh rewrites this line along with URLs + shas.
+    # (The ComponentsOrder cop objects to per-OS version pins; CI and
+    # `make style` run brew style with --except-cops for it.)
+    version "0.1.0"
     on_intel do
       url "https://github.com/TwoWells/Themis/releases/download/v0.1.0/themis-x86_64-unknown-linux-gnu.tar.gz"
       sha256 "3ce410c9ecb6381454054ecdb130b985c1f2423194f1ba621fafa4be92bae194"

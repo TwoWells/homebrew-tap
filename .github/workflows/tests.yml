@@ -1,5 +1,18 @@
 name: brew test-bot
 
+# Unrolled test-bot: the same gates `brew test-bot --only-tap-syntax` and
+# `--only-formulae` run, as explicit brew commands. Unrolled because themis
+# and lattice must pin `version` inside their on_linux blocks (brew's URL
+# scanner misparses their x86_64 basenames on Linux, and a global pin is
+# rejected as redundant by audit on macOS where scanning works) — the
+# ComponentsOrder cop forbids that pin, test-bot's embedded style step has no
+# cop opt-out, and brew style ignores tap-level .rubocop.yml. Only that one
+# cop is excluded; every other style/readall/audit/install/test gate is kept.
+#
+# The job name and matrix must stay as-is: branch protection requires the
+# "test-bot (<os>)" checks by name, and the bump automation's auto-merge PRs
+# wait on them.
+
 on:
   push:
     branches:
@@ -23,20 +36,23 @@ jobs:
         id: set-up-homebrew
         uses: Homebrew/actions/setup-homebrew@master
 
-      - name: Cache Homebrew Bundler RubyGems
-        uses: actions/cache@v4
-        with:
-          path: ${{ steps.set-up-homebrew.outputs.gems-path }}
-          key: ${{ matrix.os }}-rubygems-${{ steps.set-up-homebrew.outputs.gems-hash }}
-          restore-keys: ${{ matrix.os }}-rubygems-
+      # test-bot's tap-syntax stage, minus the one cop (see header).
+      - run: brew style --except-cops FormulaAudit/ComponentsOrder twowells/tap
 
-      - run: brew test-bot --only-cleanup-before
+      - run: brew readall --aliases --os=all --arch=all twowells/tap
 
-      - run: brew test-bot --only-setup
+      - run: brew audit --except=installed --tap=twowells/tap
 
-      # Style + audit the formula on every push and PR.
-      - run: brew test-bot --only-tap-syntax
-
-      # Full install + `test do` run — only on PRs (where the gate matters).
-      - run: brew test-bot --only-formulae
+      # test-bot's formulae stage: install + audit + linkage + `test do` for
+      # every formula — only on PRs (where the gate matters).
+      - name: Install, audit, and test formulae
         if: github.event_name == 'pull_request'
+        env:
+          HOMEBREW_GITHUB_API_TOKEN: ${{ github.token }}
+        run: |
+          for f in themis lattice catenary; do
+            brew install --verbose "twowells/tap/$f"
+            brew audit --formula "twowells/tap/$f" --online --git --skip-style
+            brew linkage --test "twowells/tap/$f"
+            brew test --verbose "twowells/tap/$f"
+          done
