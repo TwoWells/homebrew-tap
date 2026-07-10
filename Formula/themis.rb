@@ -45,8 +45,8 @@ class Themis < Formula
     # the basename shape), so Linux pins the version explicitly. macOS scans
     # its aarch64 URL fine — and audit rejects a redundant global pin — so the
     # pin lives only here. bump.sh rewrites this line along with URLs + shas.
-    # (The ComponentsOrder cop objects to per-OS version pins; .rubocop.yml
-    # excludes this formula from it.)
+    # (The ComponentsOrder cop objects to per-OS version pins; CI and
+    # `make style` run brew style with --except-cops for it.)
     version "0.1.0"
     on_intel do
       url "https://github.com/TwoWells/Themis/releases/download/v0.1.0/themis-x86_64-unknown-linux-gnu.tar.gz"

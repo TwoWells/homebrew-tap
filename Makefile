@@ -18,7 +18,8 @@ help: ## Show this help
 		| awk 'BEGIN{FS=":.*?## "}{printf "  \033[36m%-10s\033[0m %s\n", $$1, $$2}'
 
 style: ## Check formula formatting (brew style / rubocop)
-	brew style $(FORMULA)
+	# --except-cops: themis/lattice pin version inside on_linux (see tests.yml)
+	brew style --except-cops FormulaAudit/ComponentsOrder $(FORMULA)
 
 audit: ## Audit the formula (brew audit --strict --online)
 	brew audit --strict --online $(FORMULA)
