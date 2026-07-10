@@ -12,10 +12,6 @@
 class Lattice < Formula
   desc "Markdown predicate linter and backlink reconciler, shipped as an LSP server"
   homepage "https://github.com/TwoWells/Lattice"
-  # Explicit: on Linux, brew's URL version scanner misparses the active
-  # x86_64-unknown-linux-gnu basename as "64-unknown-linux-gnu" (each OS scans
-  # its own url). A bump rewrites THIS line + URLs + sha256s.
-  version "0.5.0"
   license "AGPL-3.0-or-later"
 
   livecheck do
@@ -40,6 +36,11 @@ class Lattice < Formula
   end
 
   on_linux do
+    # brew's URL scanner misparses the x86_64 basename as
+    # "64-unknown-linux-gnu", so Linux pins the version explicitly. macOS scans
+    # its aarch64 URL fine — and audit rejects a redundant global pin — so the
+    # pin lives only here. bump.sh rewrites this line along with URLs + shas.
+    version "0.5.0"
     on_intel do
       url "https://github.com/TwoWells/Lattice/releases/download/v0.5.0/lattice-x86_64-unknown-linux-gnu.tar.gz"
       sha256 "88cf24373f631db6f3e7a6e2e599efb58d05f3fc2f9c960f633893a9ce5fb664"
