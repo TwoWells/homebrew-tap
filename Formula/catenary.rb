@@ -17,7 +17,7 @@ class Catenary < Formula
   # Explicit: the release assets are bare binaries whose basenames end in
   # digits (catenary-macos-arm64 / catenary-linux-amd64), so brew's URL
   # version scanner reads "64". A bump rewrites THIS line + URLs + sha256s.
-  version "2.0.1"
+  version "2.0.2"
   license "AGPL-3.0-or-later"
 
   livecheck do
@@ -32,23 +32,23 @@ class Catenary < Formula
   # their OS's one binary; `install` refuses them with a clear message.
   on_macos do
     on_arm do
-      url "https://github.com/TwoWells/Catenary/releases/download/v2.0.1/catenary-macos-arm64"
-      sha256 "ae7bc22ea4e7d598e33008860d22fb00c7064075baa9c53e6ecbd22de2a6962e"
+      url "https://github.com/TwoWells/Catenary/releases/download/v2.0.2/catenary-macos-arm64"
+      sha256 "36d91c8dd79f72eb4653ec146a8a99bd8dbe4bc763bd4e108af841fa1c6a095b"
     end
     on_intel do
-      url "https://github.com/TwoWells/Catenary/releases/download/v2.0.1/catenary-macos-arm64"
-      sha256 "ae7bc22ea4e7d598e33008860d22fb00c7064075baa9c53e6ecbd22de2a6962e"
+      url "https://github.com/TwoWells/Catenary/releases/download/v2.0.2/catenary-macos-arm64"
+      sha256 "36d91c8dd79f72eb4653ec146a8a99bd8dbe4bc763bd4e108af841fa1c6a095b"
     end
   end
 
   on_linux do
     on_intel do
-      url "https://github.com/TwoWells/Catenary/releases/download/v2.0.1/catenary-linux-amd64"
-      sha256 "bc5386a5f34e13d733d84af935b2cea8eaafbbcef0b22c806dddca7283e3b798"
+      url "https://github.com/TwoWells/Catenary/releases/download/v2.0.2/catenary-linux-amd64"
+      sha256 "95bf3f93f276c79b21fe4a341d4a8108e2deba2f7edbebd4869f44dd4be7f7fd"
     end
     on_arm do
-      url "https://github.com/TwoWells/Catenary/releases/download/v2.0.1/catenary-linux-amd64"
-      sha256 "bc5386a5f34e13d733d84af935b2cea8eaafbbcef0b22c806dddca7283e3b798"
+      url "https://github.com/TwoWells/Catenary/releases/download/v2.0.2/catenary-linux-amd64"
+      sha256 "95bf3f93f276c79b21fe4a341d4a8108e2deba2f7edbebd4869f44dd4be7f7fd"
     end
   end
 
