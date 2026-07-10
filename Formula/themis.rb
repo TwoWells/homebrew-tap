@@ -11,6 +11,11 @@
 class Themis < Formula
   desc "Theme orchestrator CLI for Linux and macOS"
   homepage "https://github.com/TwoWells/Themis"
+  # Explicit: on Linux, brew's URL version scanner misparses the active
+  # x86_64-unknown-linux-gnu basename as "64-unknown-linux-gnu" (each OS scans
+  # its own url) — caught by lattice's test-bot run; themis shares the basename
+  # shape. A bump rewrites THIS line + URLs + sha256s.
+  version "0.1.0"
   license "AGPL-3.0-or-later"
 
   livecheck do
