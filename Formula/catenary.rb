@@ -12,6 +12,10 @@
 class Catenary < Formula
   desc "LSP-powered code intelligence for AI coding agents"
   homepage "https://github.com/TwoWells/Catenary"
+  # Explicit: the release assets are bare binaries whose basenames end in
+  # digits (catenary-macos-arm64 / catenary-linux-amd64), so brew's URL
+  # version scanner reads "64". A bump rewrites THIS line + URLs + sha256s.
+  version "2.0.1"
   license "AGPL-3.0-or-later"
 
   livecheck do
