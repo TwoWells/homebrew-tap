@@ -1,0 +1,23 @@
+name: Dependabot auto-merge
+
+# Arms GitHub auto-merge on every dependabot PR so it lands by itself once
+# the required test-bot checks are green — the same gate every human PR has.
+# GITHUB_TOKEN suffices: arming is not merging, the ruleset still blocks
+# anything red, and (unlike OAuth-app tokens) GITHUB_TOKEN may merge PRs
+# that touch workflow files.
+
+on: pull_request
+
+permissions:
+  contents: write
+  pull-requests: write
+
+jobs:
+  automerge:
+    if: github.actor == 'dependabot[bot]'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Enable auto-merge
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: gh pr merge --auto --squash "${{ github.event.pull_request.html_url }}"
