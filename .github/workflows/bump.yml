@@ -45,7 +45,7 @@ jobs:
             darwin_asset: catenary-macos-arm64
             linux_asset: catenary-linux-amd64
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
         with:
           token: ${{ secrets.TAP_BUMP_TOKEN }}
 
