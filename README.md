@@ -23,11 +23,11 @@ source there instead.
 
 ## How it stays current
 
-This tap is the **canonical home** for these formulae. An hourly GitHub Actions job
-([`bump.yml`](.github/workflows/bump.yml), one matrix job per formula) watches upstream releases;
-when a new version ships it opens a pull request that bumps the version and the per-platform
-`sha256`s (read from the release's `.sha256` sidecar assets, falling back to hashing the
-assets themselves). That PR **auto-merges once
+This tap is the **canonical home** for these formulae. When an upstream cuts a release, its
+release workflow dispatches [`bump.yml`](.github/workflows/bump.yml) here (one matrix job per
+formula; a 6-hourly scheduled run is the fallback for a missed dispatch). The job opens a pull
+request that bumps the version and the per-platform `sha256`s (read from the release's `.sha256`
+sidecar assets, falling back to hashing the assets themselves). That PR **auto-merges once
 [`brew test-bot`](.github/workflows/tests.yml) is green** on both Linux and macOS.
 
 No manual copy step. To force a check or bump the formulae locally, run `make bump`. Other dev

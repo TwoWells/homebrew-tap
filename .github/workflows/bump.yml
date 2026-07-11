@@ -1,7 +1,11 @@
 name: Bump formula
 
-# Watches upstream releases (one matrix job per formula) and opens an
-# auto-merging PR when a new version ships. The PR is opened with a PAT
+# Checks upstream releases (one matrix job per formula) and opens an
+# auto-merging PR when a new version ships. Normally this fires via
+# workflow_dispatch from an upstream's release workflow (its
+# notify-distribution job, armed with the DIST_DISPATCH_TOKEN org secret) the
+# moment a release is cut; the schedule is the fallback for a missed or
+# failed dispatch. The PR is opened with a PAT
 # (secrets.TAP_BUMP_TOKEN) on purpose: a PR opened with the default
 # GITHUB_TOKEN does NOT trigger the test-bot workflow, so auto-merge would
 # wait forever on a check that never runs.
@@ -14,7 +18,7 @@ name: Bump formula
 
 on:
   schedule:
-    - cron: "17 * * * *" # hourly; only acts when an upstream has a newer release
+    - cron: "17 */6 * * *" # fallback poll; releases dispatch this directly
   workflow_dispatch:
 
 permissions:
