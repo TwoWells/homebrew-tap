@@ -26,12 +26,12 @@ class Lattice < Formula
   # The version is scanned from the URL, so a bump just rewrites URLs + shas.
   on_macos do
     on_arm do
-      url "https://github.com/TwoWells/Lattice/releases/download/v0.5.0/lattice-aarch64-apple-darwin.tar.gz"
-      sha256 "c6744d85f5eb3c4fe2615595c7235f48d2a7d3ec661c32f74f5b8507bb3f1dc6"
+      url "https://github.com/TwoWells/Lattice/releases/download/v0.6.0/lattice-aarch64-apple-darwin.tar.gz"
+      sha256 "9d35e951f72c7d049a4b34e527287ddfc857bd84703872c5678b489452c3ee01"
     end
     on_intel do
-      url "https://github.com/TwoWells/Lattice/releases/download/v0.5.0/lattice-aarch64-apple-darwin.tar.gz"
-      sha256 "c6744d85f5eb3c4fe2615595c7235f48d2a7d3ec661c32f74f5b8507bb3f1dc6"
+      url "https://github.com/TwoWells/Lattice/releases/download/v0.6.0/lattice-aarch64-apple-darwin.tar.gz"
+      sha256 "9d35e951f72c7d049a4b34e527287ddfc857bd84703872c5678b489452c3ee01"
     end
   end
 
@@ -42,14 +42,14 @@ class Lattice < Formula
     # pin lives only here. bump.sh rewrites this line along with URLs + shas.
     # (The ComponentsOrder cop objects to per-OS version pins; CI and
     # `make style` run brew style with --except-cops for it.)
-    version "0.5.0"
+    version "0.6.0"
     on_intel do
-      url "https://github.com/TwoWells/Lattice/releases/download/v0.5.0/lattice-x86_64-unknown-linux-gnu.tar.gz"
-      sha256 "88cf24373f631db6f3e7a6e2e599efb58d05f3fc2f9c960f633893a9ce5fb664"
+      url "https://github.com/TwoWells/Lattice/releases/download/v0.6.0/lattice-x86_64-unknown-linux-gnu.tar.gz"
+      sha256 "34944be80ff0f97dd267a08c98434b6563eb286cc071aefaa2647083462789d2"
     end
     on_arm do
-      url "https://github.com/TwoWells/Lattice/releases/download/v0.5.0/lattice-x86_64-unknown-linux-gnu.tar.gz"
-      sha256 "88cf24373f631db6f3e7a6e2e599efb58d05f3fc2f9c960f633893a9ce5fb664"
+      url "https://github.com/TwoWells/Lattice/releases/download/v0.6.0/lattice-x86_64-unknown-linux-gnu.tar.gz"
+      sha256 "34944be80ff0f97dd267a08c98434b6563eb286cc071aefaa2647083462789d2"
     end
   end
 
