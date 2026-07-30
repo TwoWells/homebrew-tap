@@ -30,23 +30,23 @@ class Catenary < Formula
   # a bump just rewrites URLs + shas.
   on_macos do
     on_arm do
-      url "https://github.com/TwoWells/Catenary/releases/download/v2.1.1/catenary-macos-arm64"
-      sha256 "d0d08296acd2c5e01800722cab879e406553a4c6f26f9ce697ad4cf94e5fb1ae"
+      url "https://github.com/TwoWells/Catenary/releases/download/v2.1.2/catenary-macos-arm64"
+      sha256 "4b072ff69760de093daf9d315b7ed3f33967bb2924e8b06ebd1f912638a3d48f"
     end
     on_intel do
-      url "https://github.com/TwoWells/Catenary/releases/download/v2.1.1/catenary-macos-arm64"
-      sha256 "d0d08296acd2c5e01800722cab879e406553a4c6f26f9ce697ad4cf94e5fb1ae"
+      url "https://github.com/TwoWells/Catenary/releases/download/v2.1.2/catenary-macos-arm64"
+      sha256 "4b072ff69760de093daf9d315b7ed3f33967bb2924e8b06ebd1f912638a3d48f"
     end
   end
 
   on_linux do
     on_intel do
-      url "https://github.com/TwoWells/Catenary/releases/download/v2.1.1/catenary-linux-amd64"
-      sha256 "d36b8861bb3873138b5e85d8aef31eb851ec06d0b434d5cf790a8a29c16a6eb4"
+      url "https://github.com/TwoWells/Catenary/releases/download/v2.1.2/catenary-linux-amd64"
+      sha256 "0bde1c25253e8dc7bcae6efe6c1148138cb593d51ebb8150147843f33a06eb4d"
     end
     on_arm do
-      url "https://github.com/TwoWells/Catenary/releases/download/v2.1.1/catenary-linux-amd64"
-      sha256 "d36b8861bb3873138b5e85d8aef31eb851ec06d0b434d5cf790a8a29c16a6eb4"
+      url "https://github.com/TwoWells/Catenary/releases/download/v2.1.2/catenary-linux-amd64"
+      sha256 "0bde1c25253e8dc7bcae6efe6c1148138cb593d51ebb8150147843f33a06eb4d"
     end
   end
 
