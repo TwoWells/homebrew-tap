@@ -1,13 +1,11 @@
 name: brew test-bot
 
 # Unrolled test-bot: the same gates `brew test-bot --only-tap-syntax` and
-# `--only-formulae` run, as explicit brew commands. Unrolled because themis
-# and lattice must pin `version` inside their on_linux blocks (brew's URL
-# scanner misparses their x86_64 basenames on Linux, and a global pin is
-# rejected as redundant by audit on macOS where scanning works) — the
-# ComponentsOrder cop forbids that pin, test-bot's embedded style step has no
-# cop opt-out, and brew style ignores tap-level .rubocop.yml. Only that one
-# cop is excluded; every other style/readall/audit/install/test gate is kept.
+# `--only-formulae` run, as explicit brew commands. Originally unrolled to
+# opt out of the ComponentsOrder cop for per-OS `version` pins; those pins
+# are gone (brew's July 2026 release-URL version-detection fix made them
+# redundant), but the unrolled form stays — the check names below are pinned
+# by branch protection, and the explicit steps keep each gate visible.
 #
 # The job name and matrix must stay as-is: branch protection requires the
 # "test-bot (<os>)" checks by name, and the bump automation's auto-merge PRs
@@ -36,8 +34,8 @@ jobs:
         id: set-up-homebrew
         uses: Homebrew/actions/setup-homebrew@master
 
-      # test-bot's tap-syntax stage, minus the one cop (see header).
-      - run: brew style --except-cops FormulaAudit/ComponentsOrder twowells/tap
+      # test-bot's tap-syntax stage.
+      - run: brew style twowells/tap
 
       - run: brew readall --aliases --os=all --arch=all twowells/tap
 

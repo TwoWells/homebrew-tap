@@ -33,8 +33,6 @@ jobs:
       matrix:
         # Asset names default to the tap convention (<name>-<target>.tar.gz);
         # catenary overrides them because its release assets are bare binaries.
-        # Its formula also pins an explicit `version` line (brew's URL scanner
-        # reads "64" from those basenames) — bump.sh rewrites that line too.
         include:
           - formula: themis
             repo: TwoWells/Themis

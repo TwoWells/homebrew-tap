@@ -36,13 +36,6 @@ class Lattice < Formula
   end
 
   on_linux do
-    # brew's URL scanner misparses the x86_64 basename as
-    # "64-unknown-linux-gnu", so Linux pins the version explicitly. macOS scans
-    # its aarch64 URL fine — and audit rejects a redundant global pin — so the
-    # pin lives only here. bump.sh rewrites this line along with URLs + shas.
-    # (The ComponentsOrder cop objects to per-OS version pins; CI and
-    # `make style` run brew style with --except-cops for it.)
-    version "0.6.0"
     on_intel do
       url "https://github.com/TwoWells/Lattice/releases/download/v0.6.0/lattice-x86_64-unknown-linux-gnu.tar.gz"
       sha256 "34944be80ff0f97dd267a08c98434b6563eb286cc071aefaa2647083462789d2"
