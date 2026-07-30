@@ -4,7 +4,7 @@
 # This tap (TwoWells/homebrew-tap) is the canonical home for the formula —
 # users run `brew install twowells/tap/catenary` (the Claude Code plugin's
 # missing-binary hint suggests exactly that command). Do NOT hand-edit the
-# version, the `version` line, or the sha256s: .github/workflows/bump.yml
+# version or the sha256s: .github/workflows/bump.yml
 # watches Catenary releases and opens an auto-merging PR that updates them
 # (passing the bare-binary asset names explicitly — see scripts/bump.sh).
 # For a manual bump, run `make bump`.
@@ -14,10 +14,6 @@
 class Catenary < Formula
   desc "LSP-powered code intelligence for AI coding agents"
   homepage "https://github.com/TwoWells/Catenary"
-  # Explicit: the release assets are bare binaries whose basenames end in
-  # digits (catenary-macos-arm64 / catenary-linux-amd64), so brew's URL
-  # version scanner reads "64". A bump rewrites THIS line + URLs + sha256s.
-  version "2.0.2"
   license "AGPL-3.0-or-later"
 
   livecheck do
@@ -30,25 +26,27 @@ class Catenary < Formula
   # audit requires every arch/OS combo to resolve a URL and only allows
   # url/sha256 inside on_arm/on_intel, so the two unsupported combos reuse
   # their OS's one binary; `install` refuses them with a clear message.
+  # The version is scanned from the release-URL path (/download/vX.Y.Z/), so
+  # a bump just rewrites URLs + shas.
   on_macos do
     on_arm do
-      url "https://github.com/TwoWells/Catenary/releases/download/v2.0.2/catenary-macos-arm64"
-      sha256 "36d91c8dd79f72eb4653ec146a8a99bd8dbe4bc763bd4e108af841fa1c6a095b"
+      url "https://github.com/TwoWells/Catenary/releases/download/v2.1.0/catenary-macos-arm64"
+      sha256 "1c96b4bfb504ece045802285a81db7dc967d45c9df7f7d2cf2ceb7e5880fdabb"
     end
     on_intel do
-      url "https://github.com/TwoWells/Catenary/releases/download/v2.0.2/catenary-macos-arm64"
-      sha256 "36d91c8dd79f72eb4653ec146a8a99bd8dbe4bc763bd4e108af841fa1c6a095b"
+      url "https://github.com/TwoWells/Catenary/releases/download/v2.1.0/catenary-macos-arm64"
+      sha256 "1c96b4bfb504ece045802285a81db7dc967d45c9df7f7d2cf2ceb7e5880fdabb"
     end
   end
 
   on_linux do
     on_intel do
-      url "https://github.com/TwoWells/Catenary/releases/download/v2.0.2/catenary-linux-amd64"
-      sha256 "95bf3f93f276c79b21fe4a341d4a8108e2deba2f7edbebd4869f44dd4be7f7fd"
+      url "https://github.com/TwoWells/Catenary/releases/download/v2.1.0/catenary-linux-amd64"
+      sha256 "f586b0545a010d3b2cb7fc2bee7ed519ff68921e230b9e77aef7508d481f44ee"
     end
     on_arm do
-      url "https://github.com/TwoWells/Catenary/releases/download/v2.0.2/catenary-linux-amd64"
-      sha256 "95bf3f93f276c79b21fe4a341d4a8108e2deba2f7edbebd4869f44dd4be7f7fd"
+      url "https://github.com/TwoWells/Catenary/releases/download/v2.1.0/catenary-linux-amd64"
+      sha256 "f586b0545a010d3b2cb7fc2bee7ed519ff68921e230b9e77aef7508d481f44ee"
     end
   end
 

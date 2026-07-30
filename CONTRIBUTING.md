@@ -29,13 +29,12 @@ repo, where auto-generated tarballs legitimately drift.)
 `brew audit` / `brew style` (run by `tests.yml`) enforce a few non-obvious rules
 that cost a multi-PR debugging loop to learn. Before touching `Formula/themis.rb`:
 
-- **No explicit `version` where brew can scan it from the URL** — a redundant
-  pin trips the "redundant with version scanned from URL" audit. But brew's
-  scanner *misparses* `x86_64-…` basenames (it reads "64-unknown-linux-gnu"),
-  so themis and lattice pin `version` inside `on_linux` (the ComponentsOrder
-  cop objects; CI and `make style` run with `--except-cops` for it), and
-  catenary — bare binaries, unscannable on both platforms — pins one global
-  `version`. `bump.sh` rewrites these pins along with URLs and shas.
+- **No explicit `version`** — brew scans it from the
+  `/releases/download/vX.Y.Z/` path of the download URL, and a pin trips the
+  "redundant with version scanned from URL" audit. (Brew's scanner used to
+  misparse `x86_64-…`/`arm64` basenames, which forced per-OS and global pins
+  here; its July 2026 release-URL version-detection fix removed the need and
+  made the audit flag them.)
 - **`url`/`sha256` go inside `on_arm`/`on_intel`**, never directly in
   `on_macos`/`on_linux` (`FormulaAudit/ComponentsOrder`).
 - **Every arch/OS combo must resolve a URL** or audit rejects the formula
@@ -61,8 +60,8 @@ required:
    `vX.Y.Z` tag. Follow that convention and everything below works unmodified;
    deviate (like catenary's bare binaries) and every step needs overrides.
 2. **Formula.** Copy `Formula/lattice.rb` as the template (it has the
-   four-combo platform matrix, the `on_linux` version pin, and the install
-   guard) and adjust name/description/homepage/URLs.
+   four-combo platform matrix and the install guard) and adjust
+   name/description/homepage/URLs.
 3. **Bump matrix.** Add a `formula`/`repo` entry to the matrix in
    [`bump.yml`](.github/workflows/bump.yml); add `darwin_asset`/`linux_asset`
    overrides only if the upstream deviates from the asset convention.

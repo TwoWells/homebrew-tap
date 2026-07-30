@@ -15,10 +15,10 @@ set -euo pipefail
 # x86_64-unknown-linux-gnu. Catenary ships bare per-platform binaries instead,
 # so it passes its basenames explicitly.
 #
-# The version must be embedded in the release-download URLs. If the formula
-# also pins an explicit `version "…"` line (catenary does — brew's URL scanner
-# reads "64" from its bare-binary basenames), that line is rewritten too; the
-# rewrite is a no-op for formulae that let brew scan the URL.
+# The version must be embedded in the release-download URLs — brew scans it
+# from the /releases/download/vX.Y.Z/ path segment, so no formula pins an
+# explicit `version "…"` line (audit rejects such a pin as redundant). The
+# rewrite below still updates one defensively if it ever reappears.
 #
 # Requires: gh (authenticated), python3. Writes BUMPED/VERSION to GITHUB_OUTPUT
 # under Actions; otherwise just edits the file and prints a summary.
