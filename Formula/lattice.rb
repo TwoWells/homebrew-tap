@@ -26,23 +26,23 @@ class Lattice < Formula
   # The version is scanned from the URL, so a bump just rewrites URLs + shas.
   on_macos do
     on_arm do
-      url "https://github.com/TwoWells/Lattice/releases/download/v0.6.0/lattice-aarch64-apple-darwin.tar.gz"
-      sha256 "9d35e951f72c7d049a4b34e527287ddfc857bd84703872c5678b489452c3ee01"
+      url "https://github.com/TwoWells/Lattice/releases/download/v0.7.0/lattice-aarch64-apple-darwin.tar.gz"
+      sha256 "e85a11b12159022df4a456f661af0fa9cff496c721a4cd5119f414dc1b9995a8"
     end
     on_intel do
-      url "https://github.com/TwoWells/Lattice/releases/download/v0.6.0/lattice-aarch64-apple-darwin.tar.gz"
-      sha256 "9d35e951f72c7d049a4b34e527287ddfc857bd84703872c5678b489452c3ee01"
+      url "https://github.com/TwoWells/Lattice/releases/download/v0.7.0/lattice-aarch64-apple-darwin.tar.gz"
+      sha256 "e85a11b12159022df4a456f661af0fa9cff496c721a4cd5119f414dc1b9995a8"
     end
   end
 
   on_linux do
     on_intel do
-      url "https://github.com/TwoWells/Lattice/releases/download/v0.6.0/lattice-x86_64-unknown-linux-gnu.tar.gz"
-      sha256 "34944be80ff0f97dd267a08c98434b6563eb286cc071aefaa2647083462789d2"
+      url "https://github.com/TwoWells/Lattice/releases/download/v0.7.0/lattice-x86_64-unknown-linux-gnu.tar.gz"
+      sha256 "60155c84a3303b66f3991782ad5c9978b188237f9aca44b118c7a107ca6b9c32"
     end
     on_arm do
-      url "https://github.com/TwoWells/Lattice/releases/download/v0.6.0/lattice-x86_64-unknown-linux-gnu.tar.gz"
-      sha256 "34944be80ff0f97dd267a08c98434b6563eb286cc071aefaa2647083462789d2"
+      url "https://github.com/TwoWells/Lattice/releases/download/v0.7.0/lattice-x86_64-unknown-linux-gnu.tar.gz"
+      sha256 "60155c84a3303b66f3991782ad5c9978b188237f9aca44b118c7a107ca6b9c32"
     end
   end
 
