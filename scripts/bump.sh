@@ -38,7 +38,8 @@ out() { echo "${1}" >>"${GITHUB_OUTPUT:-/dev/null}"; }
 fetch_sha() {
   local sha
   sha="$(gh release download "${latest_tag}" --repo "${REPO}" --pattern "${1}.sha256" --output - | awk '{print $1}')" || sha=""
-  if [[ ! "${sha}" =~ ^[0-9a-f]{64}$ ]]; then
+  if [[ ! "${sha}" =~ ^[0-9a-f]{64}$ ]]
+  then
     echo "::error::${NAME} ${latest_tag}: missing or malformed ${1}.sha256 sidecar — refusing to hash a download instead. The upstream release must publish the sidecar (TwoWells release contract)." >&2
     return 1
   fi
