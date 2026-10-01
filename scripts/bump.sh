@@ -31,11 +31,18 @@ FORMULA="Formula/${NAME}.rb"
 
 out() { echo "${1}" >>"${GITHUB_OUTPUT:-/dev/null}"; }
 
-# Per-target sha256: read the published .sha256 sidecar; if the release
-# predates sidecars, fall back to downloading the asset and hashing it.
+# Per-target sha256: the published .sha256 sidecar is the only hash source —
+# the pin is copied from the upstream's release claim, never computed from a
+# download. A missing sidecar means the upstream release contract broke; fail
+# loudly rather than enshrining whatever bytes we fetched.
 fetch_sha() {
-  gh release download "${latest_tag}" --repo "${REPO}" --pattern "${1}.sha256" --output - 2>/dev/null | awk '{print $1}' ||
-    gh release download "${latest_tag}" --repo "${REPO}" --pattern "${1}" --output - | sha256sum | awk '{print $1}'
+  local sha
+  sha="$(gh release download "${latest_tag}" --repo "${REPO}" --pattern "${1}.sha256" --output - | awk '{print $1}')" || sha=""
+  if [[ ! "${sha}" =~ ^[0-9a-f]{64}$ ]]; then
+    echo "::error::${NAME} ${latest_tag}: missing or malformed ${1}.sha256 sidecar — refusing to hash a download instead. The upstream release must publish the sidecar (TwoWells release contract)." >&2
+    return 1
+  fi
+  echo "${sha}"
 }
 
 latest_tag="$(gh api "repos/${REPO}/releases/latest" --jq .tag_name)"
