@@ -6,8 +6,8 @@ Homebrew formulae for TwoWells tools:
 - **[Lattice](https://github.com/TwoWells/Lattice)** — a markdown predicate linter and backlink
   reconciler, shipped as an LSP server.
 - **[Catenary](https://github.com/TwoWells/Catenary)** — LSP-powered code intelligence for AI
-  _(Upstream archived October 2026 — the formula is frozen at 2.1.2 and is not maintained.)_
-  coding agents.
+  coding agents. _Upstream archived October 2026; the formula is frozen at 2.1.2 and is not
+  maintained._
 
 ## Install
 
